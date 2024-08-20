@@ -20,6 +20,7 @@ class Command(BaseCommand):
 
         for payments in Command.json_read_payments():
             payments_for_create.append(Payments(payments["pk"],
+                                               payments["fields"]["user"],
                                                payments["fields"]["payment_date"],
                                                payments["fields"]["paid_course"],
                                                payments["fields"]["paid_lesson"],

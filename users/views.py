@@ -1,7 +1,6 @@
 from rest_framework.filters import OrderingFilter
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework.generics import ListAPIView
-
 from users.serializer import PaymentSerializer
 from users.models import Payments
 
