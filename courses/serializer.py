@@ -1,4 +1,5 @@
 from rest_framework.serializers import ModelSerializer, SerializerMethodField
+
 from courses.models import Courses, Lessons
 
 
@@ -16,7 +17,7 @@ class CourseSerializer(ModelSerializer):
 
 class CourseDetailSerializer(ModelSerializer):
     count_lessons = SerializerMethodField()
-    lessons = LessonSerializer(many=True, source='courses', read_only=True)
+    lessons = LessonSerializer(many=True, source="courses", read_only=True)
 
     def get_count_lessons(self, pk):
         return Lessons.objects.filter(course=pk).count()
