@@ -1,6 +1,6 @@
 from django.urls import path
 from rest_framework.routers import SimpleRouter
-
+from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
 from courses.apps import CoursesConfig
 from courses.views import (CourseViewSet, LessonCreateApiView,
                            LessonDestroyApiView, LessonListApiView,
