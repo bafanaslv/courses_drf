@@ -1,8 +1,5 @@
 from django.urls import path
 from rest_framework.routers import SimpleRouter
-from rest_framework_simplejwt.views import (TokenObtainPairView,
-                                            TokenRefreshView)
-
 from courses.apps import CoursesConfig
 from courses.views import (CourseViewSet, LessonCreateApiView,
                            LessonDestroyApiView, LessonListApiView,
@@ -11,7 +8,7 @@ from courses.views import (CourseViewSet, LessonCreateApiView,
 app_name = CoursesConfig.name
 
 router = SimpleRouter()
-router.register("", CourseViewSet, basename="course")
+router.register("", CourseViewSet, basename="courses")
 
 urlpatterns = [
     path("lessons/", LessonListApiView.as_view(), name="lessons_list"),
@@ -26,5 +23,4 @@ urlpatterns = [
         "lessons/<int:pk>/update/", LessonUpdateApiView.as_view(), name="lessons_update"
     ),
 ]
-
 urlpatterns += router.urls

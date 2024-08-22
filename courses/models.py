@@ -12,11 +12,9 @@ class Courses(models.Model):
         upload_to="courses/media",
         verbose_name="изображение",
         help_text="загрузите изображение",
-        **NULLABLE,
-    )
+        **NULLABLE)
     owner = models.ForeignKey(
-        settings.AUTH_USER_MODEL, on_delete=models.CASCADE, **NULLABLE
-    )
+        settings.AUTH_USER_MODEL, on_delete=models.CASCADE, verbose_name="владелец",  **NULLABLE)
 
     class Meta:
         verbose_name = "курс"
@@ -45,8 +43,7 @@ class Lessons(models.Model):
         **NULLABLE,
     )
     owner = models.ForeignKey(
-        settings.AUTH_USER_MODEL, on_delete=models.CASCADE, **NULLABLE
-    )
+        settings.AUTH_USER_MODEL, on_delete=models.CASCADE, verbose_name="владелец", **NULLABLE)
 
     def str(self):
         return f"Урок: {self.name}"
