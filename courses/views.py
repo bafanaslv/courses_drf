@@ -24,21 +24,20 @@ class CourseViewSet(ModelViewSet):
         course.save()
 
     def get_permissions(self):
-        if self.action == 'create':
-            self.permission_classes = [~IsModerator, IsAuthenticated,]
-        elif self.action == 'destroy':
-            self.permission_classes = [~IsModerator, IsOwner,]
-        elif self.action in ['update', 'retrieve']:
-            self.permission_classes = [IsModerator | IsOwner,]
-        elif self.action == 'list':
-            self.permission_classes = [IsModerator, IsAuthenticated]
+        if self.action == "create":
+            self.permission_classes = (~IsModerator,)
+        elif self.action in ["update", "retrieve", "list"]:
+            self.permission_classes = (IsModerator | IsOwner,)
+        elif self.action == "destroy":
+            self.permission_classes = (~IsModerator | IsOwner,)
         return super().get_permissions()
 
 
 class LessonCreateApiView(CreateAPIView):
+    """Создавть могут авторизованные пользователи, которые не являеюся модераторами."""
+    print(IsModerator)
     queryset = Lessons.objects.all()
     serializer_class = LessonSerializer
-    permission_classes = [~IsModerator, IsAuthenticated]
 
     def perform_create(self, serializer):
         lesson = serializer.save()
@@ -49,22 +48,25 @@ class LessonCreateApiView(CreateAPIView):
 class LessonListApiView(ListAPIView):
     queryset = Lessons.objects.all()
     serializer_class = LessonSerializer
-    permission_classes = [IsModerator, IsAuthenticated]
 
 
 class LessonRetrieveApiView(RetrieveAPIView):
+    """Просматривать отдельного могут авторизованный пользователь, который является владельцем или модератором."""
     queryset = Lessons.objects.all()
     serializer_class = LessonSerializer
-    permission_classes = [IsModerator | IsOwner]
+    permission_classes = [IsAuthenticated, IsModerator | IsOwner]
 
 
 class LessonUpdateApiView(UpdateAPIView):
+    """Изменять могут авторизованный пользователь, который является владельцем или модератором."""
     queryset = Lessons.objects.all()
     serializer_class = LessonSerializer
-    permission_classes = [IsModerator | IsOwner]
+    permission_classes = [IsAuthenticated, IsModerator | IsOwner]
 
 
 class LessonDestroyApiView(DestroyAPIView):
+    """Удалять могут авторизованный пользователь, который является владельцем и не модератором."""
     queryset = Lessons.objects.all()
     serializer_class = LessonSerializer
-    permission_classes = [~IsModerator, IsAuthenticated]
+    permission_classes = [IsAuthenticated, IsOwner | ~IsModerator]
+

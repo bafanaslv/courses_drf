@@ -6,7 +6,7 @@ from courses.models import Courses, Lessons
 class LessonSerializer(ModelSerializer):
     class Meta:
         model = Lessons
-        fields = ["name", "course", "description"]
+        fields = ["id", "name", "course", "description"]
 
 
 class CourseSerializer(ModelSerializer):
@@ -24,4 +24,4 @@ class CourseDetailSerializer(ModelSerializer):
 
     class Meta:
         model = Courses
-        fields = ["name", "description", "lessons", "count_lessons"]
+        fields = ["id", "name", "description", "lessons", "count_lessons"]
