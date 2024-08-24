@@ -41,10 +41,10 @@ class Lessons(models.Model):
         help_text="загрузите изображение",
         **NULLABLE,
     )
-    video = models.ImageField(
-        upload_to="video/media",
-        verbose_name="видеоурок",
-        help_text="загрузите видеоурок",
+    video = models.URLField(
+        max_length=300,
+        verbose_name="Видео урока",
+        help_text="Загрузите видео урока",
         **NULLABLE,
     )
     owner = models.ForeignKey(
@@ -60,3 +60,25 @@ class Lessons(models.Model):
     class Meta:
         verbose_name = "урок"
         verbose_name_plural = "уроки"
+
+
+class Subscription(models.Model):
+    user = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE,
+        verbose_name="Пользователь",
+        related_name="subscription_user",
+    )
+    course = models.ForeignKey(
+        Courses,
+        on_delete=models.CASCADE,
+        verbose_name="Курс",
+        related_name="subscription_course",
+    )
+
+    def __str__(self):
+        return f"{self.user} - {self.course}"
+
+    class Meta:
+        verbose_name = "Подписка"
+        verbose_name_plural = "Подписки"

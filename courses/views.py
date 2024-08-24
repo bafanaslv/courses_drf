@@ -1,12 +1,24 @@
-from rest_framework.generics import (CreateAPIView, DestroyAPIView,
-                                     ListAPIView, RetrieveAPIView,
-                                     UpdateAPIView)
+from django.shortcuts import get_object_or_404
+from rest_framework.exceptions import ValidationError
+from rest_framework.generics import (
+    CreateAPIView,
+    DestroyAPIView,
+    ListAPIView,
+    RetrieveAPIView,
+    UpdateAPIView,
+)
 from rest_framework.permissions import AllowAny, IsAuthenticated
+from rest_framework.response import Response
+from rest_framework.views import APIView
 from rest_framework.viewsets import ModelViewSet
 
-from courses.models import Courses, Lessons
-from courses.serializer import (CourseDetailSerializer, CourseSerializer,
-                                LessonSerializer)
+from courses.models import Courses, Lessons, Subscription
+from courses.serializer import (
+    CourseDetailSerializer,
+    CourseSerializer,
+    LessonSerializer,
+    SubscriptionSerializer,
+)
 from users.permissions import IsModerator, IsOwner
 
 
@@ -43,14 +55,23 @@ class CourseViewSet(ModelViewSet):
 
 
 class LessonCreateApiView(CreateAPIView):
-    """Создавть могут авторизованные пользователи, которые не являеюся модераторами."""
+    """Создавть могут авторизованные пользователи, которые не являеюся модераторами.
+    Также проверяется принадлежность курса пользователю. Если пользователь не является влдельцем курса, то ошибка.
+    """
 
     queryset = Lessons.objects.all()
     serializer_class = LessonSerializer
 
     def perform_create(self, serializer):
         lesson = serializer.save()
-        lesson.owner = self.request.user
+        courses_object_list = list(Courses.objects.filter(owner=self.request.user))
+        courses_list = []
+        for course in courses_object_list:
+            courses_list.append(course.id)
+        if lesson.course.id not in courses_list:
+            raise ValidationError(
+                f"Вы не являетесь владельцем курса {lesson.course.name}!"
+            )
         lesson.save()
 
     permission_classes = [IsOwner]
@@ -80,13 +101,27 @@ class LessonRetrieveApiView(RetrieveAPIView):
 
 
 class LessonUpdateApiView(UpdateAPIView):
-    """Изменять могут авторизованный пользователь, который является владельцем или модератором."""
+    """Изменять могут авторизованный пользователь, который является владельцем или модератором.
+    Также проверяется принадлежность курса пользователю. Если пользователь не является влдельцем курса, то ошибка.
+    """
 
     def get_queryset(self):
         if IsModerator().has_permission(self.request, self):
             return Lessons.objects.all()
         else:
             return Lessons.objects.filter(owner=self.request.user)
+
+    def perform_update(self, serializer):
+        lesson = serializer.save()
+        courses_object_list = list(Courses.objects.filter(owner=self.request.user))
+        courses_list = []
+        for course in courses_object_list:
+            courses_list.append(course.id)
+        if lesson.course.id not in courses_list:
+            raise ValidationError(
+                f"Вы не являетесь владельцем курса {lesson.course.name}!"
+            )
+        lesson.save()
 
     serializer_class = LessonSerializer
     permission_classes = [IsAuthenticated, IsModerator | IsOwner]
@@ -103,3 +138,21 @@ class LessonDestroyApiView(DestroyAPIView):
 
     serializer_class = LessonSerializer
     permission_classes = [IsAuthenticated, IsOwner | ~IsModerator]
+
+
+class SubscriptionAPIView(APIView):
+    serializer_class = SubscriptionSerializer
+
+    def post(self, *args, **kwargs):
+        user = self.request.user
+        course_id = self.request.data.get("course")
+        course = get_object_or_404(Courses, pk=course_id)
+        subs_item = Subscription.objects.all().filter(user=user).filter(course=course)
+
+        if subs_item.exists():
+            subs_item.delete()
+            message = "Подписка отключена"
+        else:
+            Subscription.objects.create(user=user, course=course)
+            message = "Подписка включена"
+        return Response({"message": message})
