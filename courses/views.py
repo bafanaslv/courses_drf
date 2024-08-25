@@ -13,7 +13,7 @@ from rest_framework.views import APIView
 from rest_framework.viewsets import ModelViewSet
 
 from courses.models import Courses, Lessons, Subscription
-from courses.paginations import CoursesPaginator, LessionsPaginator
+from courses.paginations import CoursesPaginator, LessonsPaginator
 from courses.serializer import (
     CourseDetailSerializer,
     CourseSerializer,
@@ -87,7 +87,7 @@ class LessonListApiView(ListAPIView):
             return Lessons.objects.filter(owner=self.request.user)
 
     serializer_class = LessonSerializer
-    pagination_class = LessionsPaginator
+    pagination_class = LessonsPaginator
 
 
 class LessonRetrieveApiView(RetrieveAPIView):
