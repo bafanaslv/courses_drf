@@ -76,8 +76,8 @@ class Subscription(models.Model):
         related_name="subscription_course",
     )
 
-    def __str__(self):
-        return f"{self.user} - {self.course}"
+    # def __str__(self):
+    #     return f"{self.user} - {self.course}"
 
     class Meta:
         verbose_name = "Подписка"

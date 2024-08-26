@@ -1,4 +1,5 @@
 from rest_framework.serializers import ModelSerializer, SerializerMethodField
+
 from courses.models import Courses, Lessons, Subscription
 from courses.validators import AllowedLinkValidator
 
@@ -8,7 +9,8 @@ class LessonSerializer(ModelSerializer):
 
     class Meta:
         model = Lessons
-        fields = ["id", "name", "course", "description", "video", "owner"]
+        # fields = ["id", "name", "course", "description", "video", "owner"]
+        fields = ["name", "course", "description", "owner"]
 
 
 class CourseSerializer(ModelSerializer):
@@ -43,4 +45,3 @@ class CourseDetailSerializer(ModelSerializer):
             "count_lessons",
             "subscription",
         ]
-
