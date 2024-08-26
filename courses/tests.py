@@ -8,6 +8,7 @@ from users.models import User
 
 class CourseTestCase(APITestCase):
     """Тестирование CRUD курсов."""
+
     def setUp(self):
         self.user = User.objects.create(email="foxship@yandex.ru")
         self.course = Courses.objects.create(
@@ -60,6 +61,7 @@ class CourseTestCase(APITestCase):
 
 class LessonTestCase(APITestCase):
     """Тестирование CRUD уроков."""
+
     def setUp(self):
         self.user = User.objects.create(email="foxship@yandex.ru")
         self.course = Courses.objects.create(
@@ -117,6 +119,7 @@ class LessonTestCase(APITestCase):
 
 class SubscriptionTestCase(APITestCase):
     """Тестирование актавации/деактивации подписки на курс."""
+
     def setUp(self):
         self.user = User.objects.create(email="foxship@yandex.ru")
         self.course = Courses.objects.create(name="Физика")

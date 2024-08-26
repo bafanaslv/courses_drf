@@ -1,14 +1,21 @@
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework.filters import OrderingFilter
-from rest_framework.generics import (CreateAPIView, DestroyAPIView,
-                                     ListAPIView, RetrieveAPIView,
-                                     UpdateAPIView)
+from rest_framework.generics import (
+    CreateAPIView,
+    DestroyAPIView,
+    ListAPIView,
+    RetrieveAPIView,
+    UpdateAPIView,
+)
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework_simplejwt.views import TokenObtainPairView
 
 from users.models import Payments, User
-from users.serializer import (PaymentSerializer, UserSerializer,
-                              UserTokenObtainPairSerializer)
+from users.serializer import (
+    PaymentSerializer,
+    UserSerializer,
+    UserTokenObtainPairSerializer,
+)
 
 
 class PaymentListAPIView(ListAPIView):
