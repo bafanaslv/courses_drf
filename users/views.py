@@ -16,7 +16,7 @@ from users.serializer import (
     UserSerializer,
     UserTokenObtainPairSerializer,
 )
-from users.utils import create_stripe_price, create_stripe_session
+from users.services import create_stripe_price, create_stripe_session
 
 
 class PaymentListAPIView(ListAPIView):
