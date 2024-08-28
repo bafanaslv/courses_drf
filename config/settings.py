@@ -30,6 +30,7 @@ INSTALLED_APPS = [
     "users",
     "courses",
     "corsheaders",
+    "django_celery_beat",
 ]
 
 MIDDLEWARE = [
