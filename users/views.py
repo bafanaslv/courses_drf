@@ -1,21 +1,14 @@
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework.filters import OrderingFilter
-from rest_framework.generics import (
-    CreateAPIView,
-    DestroyAPIView,
-    ListAPIView,
-    RetrieveAPIView,
-    UpdateAPIView,
-)
+from rest_framework.generics import (CreateAPIView, DestroyAPIView,
+                                     ListAPIView, RetrieveAPIView,
+                                     UpdateAPIView)
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework_simplejwt.views import TokenObtainPairView
 
 from users.models import Payments, User
-from users.serializer import (
-    PaymentSerializer,
-    UserSerializer,
-    UserTokenObtainPairSerializer,
-)
+from users.serializer import (PaymentSerializer, UserSerializer,
+                              UserTokenObtainPairSerializer)
 from users.services import create_stripe_price, create_stripe_session
 
 
@@ -80,7 +73,7 @@ class PaymentCreateAPIView(CreateAPIView):
 
     def perform_create(self, serializer):
         payment = serializer.save(user=self.request.user)
-        price = create_stripe_price(payment.payment_sum)
+        price = create_stripe_price(payment.amount)
         session_id, payment_link = create_stripe_session(price)
 
         payment.session_id = session_id

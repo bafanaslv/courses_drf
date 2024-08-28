@@ -5,15 +5,10 @@ from rest_framework import permissions
 from rest_framework.routers import SimpleRouter
 
 from courses.apps import CoursesConfig
-from courses.views import (
-    CourseViewSet,
-    LessonCreateApiView,
-    LessonDestroyApiView,
-    LessonListApiView,
-    LessonRetrieveApiView,
-    LessonUpdateApiView,
-    SubscriptionAPIView,
-)
+from courses.views import (CourseViewSet, LessonCreateApiView,
+                           LessonDestroyApiView, LessonListApiView,
+                           LessonRetrieveApiView, LessonUpdateApiView,
+                           SubscriptionAPIView)
 
 app_name = CoursesConfig.name
 

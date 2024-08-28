@@ -1,13 +1,9 @@
 from django.shortcuts import get_object_or_404
 from rest_framework import status
 from rest_framework.exceptions import ValidationError
-from rest_framework.generics import (
-    CreateAPIView,
-    DestroyAPIView,
-    ListAPIView,
-    RetrieveAPIView,
-    UpdateAPIView,
-)
+from rest_framework.generics import (CreateAPIView, DestroyAPIView,
+                                     ListAPIView, RetrieveAPIView,
+                                     UpdateAPIView)
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
@@ -15,12 +11,8 @@ from rest_framework.viewsets import ModelViewSet
 
 from courses.models import Courses, Lessons, Subscription
 from courses.paginations import CoursesPaginator, LessonsPaginator
-from courses.serializer import (
-    CourseDetailSerializer,
-    CourseSerializer,
-    LessonSerializer,
-    SubscriptionSerializer,
-)
+from courses.serializer import (CourseDetailSerializer, CourseSerializer,
+                                LessonSerializer, SubscriptionSerializer)
 from users.permissions import IsModerator, IsOwner
 
 
