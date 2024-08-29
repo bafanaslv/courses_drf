@@ -13,6 +13,7 @@ from courses.models import Courses, Lessons, Subscription
 from courses.paginations import CoursesPaginator, LessonsPaginator
 from courses.serializer import (CourseDetailSerializer, CourseSerializer,
                                 LessonSerializer, SubscriptionSerializer)
+from courses.tasks import send_mail_update_course
 from users.permissions import IsModerator, IsOwner
 
 
@@ -34,6 +35,7 @@ class CourseViewSet(ModelViewSet):
     def perform_create(self, serializer):
         course = serializer.save()
         course.owner = self.request.user
+        send_mail_update_course.delay(course.id)
         course.save()
 
     def get_permissions(self):
