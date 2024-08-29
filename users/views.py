@@ -9,7 +9,7 @@ from rest_framework_simplejwt.views import TokenObtainPairView
 from users.models import Payments, User
 from users.serializer import (PaymentSerializer, UserSerializer,
                               UserTokenObtainPairSerializer)
-from users.services import create_stripe_price, create_stripe_session
+from users.services import create_stripe_price, create_stripe_session, create_stripe_product
 
 
 class PaymentListAPIView(ListAPIView):
@@ -73,9 +73,9 @@ class PaymentCreateAPIView(CreateAPIView):
 
     def perform_create(self, serializer):
         payment = serializer.save(user=self.request.user)
-        price = create_stripe_price(payment.amount)
-        session_id, payment_link = create_stripe_session(price)
-
+        stripe_product_id = create_stripe_product(payment)
+        price = create_stripe_price(stripe_product_id, payment.amount)
+        session_id, payment_link = create_stripe_session(price=price)
         payment.session_id = session_id
         payment.link = payment_link
         payment.save()

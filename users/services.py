@@ -15,13 +15,13 @@ def create_stripe_product(instance):
     return stripe_product.get("id")
 
 
-def create_stripe_price(amount):
+def create_stripe_price(product_id, amount):
     """Создает цену в stripe."""
 
     return stripe.Price.create(
         currency="usd",
         unit_amount=int(amount * 100),
-        product_data={"name": "Payment"},
+        product=product_id
     )
 
 

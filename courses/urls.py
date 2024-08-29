@@ -41,11 +41,5 @@ urlpatterns = [
         "lessons/<int:pk>/update/", LessonUpdateApiView.as_view(), name="lessons_update"
     ),
     path("subscribe/", SubscriptionAPIView.as_view(), name="courses_subscribe"),
-    path(
-        "swagger/",
-        schema_view.with_ui("swagger", cache_timeout=0),
-        name="schema-swagger-ui",
-    ),
-    path("redoc/", schema_view.with_ui("redoc", cache_timeout=0), name="schema-redoc"),
 ]
 urlpatterns += router.urls
