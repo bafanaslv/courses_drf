@@ -19,9 +19,7 @@ def create_stripe_price(product_id, amount):
     """Создает цену в stripe."""
 
     return stripe.Price.create(
-        currency="usd",
-        unit_amount=int(amount * 100),
-        product=product_id
+        currency="usd", unit_amount=int(amount * 100), product=product_id
     )
 
 
