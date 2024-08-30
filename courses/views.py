@@ -35,7 +35,6 @@ class CourseViewSet(ModelViewSet):
     def perform_create(self, serializer):
         course = serializer.save()
         course.owner = self.request.user
-        send_mail_update_course.delay(course.id)
         course.save()
 
     def get_permissions(self):
@@ -146,7 +145,7 @@ class SubscriptionAPIView(APIView):
         course_id = self.request.data.get("course")
         course = get_object_or_404(Courses, pk=course_id)
         subs_item = Subscription.objects.all().filter(user=user).filter(course=course)
-
+        send_mail_update_course.delay(course.id)
         if subs_item.exists():
             subs_item.delete()
             message = "Подписка отключена"

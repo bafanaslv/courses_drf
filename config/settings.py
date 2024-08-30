@@ -129,7 +129,6 @@ STRIPE_API_KEY = os.getenv("STRIPE_API_KEY")
 
 CELERY_BROKER_URL = os.getenv("CELERY_BROKER_URL")
 CELERY_RESULT_BACKEND = os.getenv("CELERY_RESULT_BACKEND")
-CELERY_TIMEZONE = "Asia/Almaty"
 
 CELERY_BEAT_SCHEDULE = {
     "check_last_login": {
@@ -137,6 +136,10 @@ CELERY_BEAT_SCHEDULE = {
         "schedule": timedelta(minutes=1),
     },
 }
+
+CELERY_TIMEZONE = "Australia/Tasmania"
+CELERY_TASK_TRACK_STARTED = True
+CELERY_TASK_TIME_LIMIT = 30 * 60
 
 CORS_ALLOWED_ORIGINS = [
     "https://read-only.example.com",
@@ -153,3 +156,4 @@ EMAIL_HOST_USER = os.getenv('EMAIL_HOST_USER')
 EMAIL_HOST_PASSWORD = os.getenv('EMAIL_HOST_PASSWORD')
 EMAIL_USE_TLS = os.getenv('EMAIL_USE_TLS', False) == 'True'
 EMAIL_USE_SSL = os.getenv('EMAIL_USE_SSL', False) == 'True'
+
