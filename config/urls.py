@@ -1,6 +1,5 @@
 from django.contrib import admin
 from django.urls import include, path
-
 from courses.urls import schema_view
 
 urlpatterns = [
