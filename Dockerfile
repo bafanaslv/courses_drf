@@ -1,13 +1,36 @@
 FROM python:3.12-slim
 
+#WORKDIR /app
+
+ENV POETRY_VERSION=1.8.3
+ENV POETRY_HOME=/opt/poetry
+ENV POETRY_VENV=/opt/poetry-venv
+ENV POETRY_CACHE_DIR=/opt/.cache
+
+# Устанавливаем poetry
+RUN python3 -m venv $POETRY_VENV \
+    && $POETRY_VENV/bin/pip install -U pip setuptools \
+    && $POETRY_VENV/bin/pip install poetry==${POETRY_VERSION}
+
+# Добавляем poetry в переменную окружения PATH
+ENV PATH="${PATH}:${POETRY_VENV}/bin"
+
+# Устанавливаем рабочую директорию в контейнере
 WORKDIR /app
 
-COPY pyproject.toml .
-RUN pip install --upgrade pip
-RUN pip install poetry
-RUN poetry config virtualenvs.create false
-RUN poetry install --no-root
+# Установка зависимостей
+COPY poetry.lock pyproject.toml ./
+RUN poetry install
+
+# Копируем код приложения в контейнер
 COPY . .
+
+#COPY pyproject.toml .
+#RUN pip install --upgrade pip
+#RUN pip install poetry
+#RUN poetry config virtualenvs.create false
+#RUN poetry install --no-root
+#COPY . .
 
 #COPY /requirements.txt /
 #
