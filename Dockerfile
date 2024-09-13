@@ -1,29 +1,27 @@
 FROM python:3.12-slim
 
+#ENV POETRY_VERSION=1.8.3
+#ENV POETRY_HOME=/opt/poetry
+#ENV POETRY_VENV=/opt/poetry-venv
+#ENV POETRY_CACHE_DIR=/opt/.cache
+#
+## Устанавливаем poetry
+#RUN python3 -m venv $POETRY_VENV \
+#    && $POETRY_VENV/bin/pip install -U pip setuptools \
+#    && $POETRY_VENV/bin/pip install poetry==${POETRY_VERSION}
+#
+## Добавляем poetry в переменную окружения PATH
+#ENV PATH="${PATH}:${POETRY_VENV}/bin"
+#
+## Устанавливаем рабочую директорию в контейнере
 #WORKDIR /app
-
-ENV POETRY_VERSION=1.8.3
-ENV POETRY_HOME=/opt/poetry
-ENV POETRY_VENV=/opt/poetry-venv
-ENV POETRY_CACHE_DIR=/opt/.cache
-
-# Устанавливаем poetry
-RUN python3 -m venv $POETRY_VENV \
-    && $POETRY_VENV/bin/pip install -U pip setuptools \
-    && $POETRY_VENV/bin/pip install poetry==${POETRY_VERSION}
-
-# Добавляем poetry в переменную окружения PATH
-ENV PATH="${PATH}:${POETRY_VENV}/bin"
-
-# Устанавливаем рабочую директорию в контейнере
-WORKDIR /app
-
-# Установка зависимостей
-COPY poetry.lock pyproject.toml ./
-RUN poetry install
-
-# Копируем код приложения в контейнер
-COPY . .
+#
+## Установка зависимостей
+#COPY poetry.lock pyproject.toml ./
+#RUN poetry install
+#
+## Копируем код приложения в контейнер
+#COPY . .
 
 #COPY pyproject.toml .
 #RUN pip install --upgrade pip
@@ -32,8 +30,10 @@ COPY . .
 #RUN poetry install --no-root
 #COPY . .
 
-#COPY /requirements.txt /
-#
-#RUN pip install -r /requirements.txt --no-cache-dir
+WORKDIR /app
 
-#COPY . .
+COPY /requirements.txt /
+
+RUN pip install -r /requirements.txt --no-cache-dir
+
+COPY . .
