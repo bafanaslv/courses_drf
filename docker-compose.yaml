@@ -53,7 +53,7 @@ services:
   celery-beat:
     build: .
     tty: true
-    command: celery -A beat -l INFO
+    command: celery -A config beat -l INFO
     restart: on-failure
     depends_on:
       - redis
