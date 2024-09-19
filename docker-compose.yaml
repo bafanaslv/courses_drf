@@ -4,6 +4,9 @@ services:
     restart: on-failure
     expose:
       - "6379"
+    healthcheck:
+      test: redis-cli ping
+
   db:
     image: postgres:latest
     restart: on-failure
@@ -12,12 +15,13 @@ services:
     expose:
       - "5432"
     volumes:
-      - ./pg_data/:$PG_DATA_PATH
+      - pg_data:/var/lib/postgresql/data/
     healthcheck:
-      test: ["CMD-SHELL","-c","pg_isready -U $POSTGRES_USER"]
+      test: ["CMD-SHELL","-c","pg_isready -U $POSTGRES_USER -d $POSTGRES_DB"]
       interval: 10s
       retries: 5
       timeout: 5s
+
   app:
     build: .
     tty: true
@@ -33,6 +37,7 @@ services:
       - .:/app
     env_file:
       - .env
+
   celery:
     build: .
     tty: true
@@ -46,6 +51,7 @@ services:
       - .:/app
     env_file:
       - .env
+
   celery-beat:
     build: .
     tty: true
@@ -59,5 +65,6 @@ services:
       - .:/app
     env_file:
       - .env
+
 volumes:
   pg_data:
